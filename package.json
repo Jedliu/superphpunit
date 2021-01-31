@@ -21,6 +21,11 @@
 			}
 		]
 	},
+	"publisher": "passport4j",
+	"repository": {
+        "type": "git",
+        "url": "https://github.com/Jedliu/superphpunit"
+    },
 	"scripts": {
 		"lint": "eslint .",
 		"pretest": "npm run lint",
