@@ -4,7 +4,6 @@ const vscode = require('vscode');
 // const clipboardy = require('clipboardy');
 const fs = require("fs");
 const path = require("path");
-const editor = vscode.window.activeTextEditor;
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -23,16 +22,24 @@ function activate(context) {
 			return;
 		}
 		let activeTerm = activeTermOrNull;
-        activeTerm.show(true);
+		activeTerm.show(true);
+		
+		let editor = vscode.window.activeTextEditor;
+		if (editor === null || editor === undefined) {
+			vscode.window.showErrorMessage('Please select the test function name or active the selection on the editor!');
+			return;
+		}
 
-		const text = editor.document.getText(editor.selection);
+		let selection = editor.selection;
+		let text = editor.document.getText(selection);
 		
 		if(!text){
-			// use this if triggered by a menu item,
+			
 			let newUri = folder;  // folder will be undefined when triggered by keybinding
 
-			if (!folder) {                       // so triggered by a keybinding
-				await vscode.commands.executeCommand('copyFilePath');
+			// use this if triggered by a menu item,
+			if (!folder) {
+				await vscode.commands.executeCommand('copyFilePath'); // copy filepath by the command
 				folder = await vscode.env.clipboard.readText();  // returns a string
 				newUri = await vscode.Uri.file(folder);          // make it a Uri 
 			}
