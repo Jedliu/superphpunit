@@ -36,12 +36,17 @@ function activate(context) {
 		if(!text){
 			
 			let newUri = folder;  // folder will be undefined when triggered by keybinding
+			let clipboardHisData = null;
 
 			// use this if triggered by a menu item,
 			if (!folder) {
+				clipboardHisData = await vscode.env.clipboard.readText(); // save the clipboard original data
+
 				await vscode.commands.executeCommand('copyFilePath'); // copy filepath by the command
 				folder = await vscode.env.clipboard.readText();  // returns a string
 				newUri = await vscode.Uri.file(folder);          // make it a Uri 
+
+				clipboardHisData = await vscode.env.clipboard.readText(); // save the clipboard original data
 			}
 
 			let files = newUri.path.split('\n');
